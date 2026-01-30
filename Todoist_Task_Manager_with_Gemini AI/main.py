@@ -33,7 +33,7 @@ def show_todos():
     return todos
 
 
-tools=[add_todo]
+tools=[add_todo,show_todos]
 
 llm =ChatGoogleGenerativeAI(
     model='gemini-2.5-flash',

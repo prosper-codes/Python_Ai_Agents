@@ -1,7 +1,10 @@
 from dotenv import load_dotenv
 import os
+
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.output_parsers import StrOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import Prompts, ChatPromptTemplate
+from langchain_core.prompts import  ChatPromptTemplate, MessagesPlaceholder
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 
@@ -27,16 +30,15 @@ llm=  ChatGoogleGenerativeAI(
     google_api_key=gemini_key,
     temperature=0.5
 )
-prompts = ChatPromptTemplate.from_messages(
-
-    prompt=system_prompt,
-
+prompt = ChatPromptTemplate.from_messages([
+    ("system", system_prompt),
+    (MessagesPlaceholder(variable_name="history")),
+    ("user","{input}")]
 )
 
+chain = prompt | llm | StrOutputParser()
 
 
-with open('file.txt') as file:
-    content = file.read()
 
 print("Hie , I am Tesla, can i help you today?")
 
@@ -47,9 +49,11 @@ while True:
 
     if user_input == "stop":
         break
-    history.append({"role": "system", "content":user_input})
-    response = llm.invoke([{"role": "system", "content": system_prompt}]+ history)
-    print(f"Tesla : {response.content}")
-    history.append({"role": "assistant" , "content": "response.content"})
+
+    response = chain.invoke({"input":user_input, "history":history})
+    print(f"Tesla : {response}")
+    history.append(HumanMessage(content=user_input))
+    history.append(AIMessage(content=response))
+
 
 

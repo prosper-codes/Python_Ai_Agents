@@ -30,8 +30,8 @@ This project is a Python-based AI assistant that integrates **Todoist** and **Go
 1. **Clone the repository**
 
 ```bash
-git clone <your-repo-url>
-cd <repo-directory>
+git clone (https://github.com/prosper-codes/Python_Ai_Agents.git)
+cd Todoist_Task_Manager_with_Gemini AI
 ```
 
 2. **Install dependencies**
